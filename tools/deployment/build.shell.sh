@@ -1,0 +1,2 @@
+#!/bin/bash
+./tools/deployment/build.pl --output=./php5.3/output.php --target=/var/www/shell.php --file=./php5.3/index.php --join=1 --compress=0 --minify=0 --encode=0 --deploy=1 --include_path=./php5.3/
