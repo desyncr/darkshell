@@ -1,0 +1,14 @@
+- json class: encode and decode json. save it to file. db::json
+- comm class: wrapper for network::www class send and parse methods.
+- protocol, state: classes to access protocol and state structures (implements db::json)
+
+To do:
+- shell class: to manage the local shell.
+- remote shell (php): uses protocol and state structs. parse commands.
+- handle internal commands: '<<', shell etc.
+
+- Do not test dark shell functioning in the dev env (this folder) deploy it, or package it, and then install in order to try it.
+	- Have a stable version ready for deployment and bug fixing
+	- Have a unstable version with lastest features
+	- use subversion branches
+- 

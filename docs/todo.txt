@@ -1,0 +1,12 @@
+1- automate the patch of targets.
+	- once there is a shell send the patched ajax_create_folder.php
+	- create a shell that accepts custom params etc.
+	- customize a shell to work as a command line/from the command line etc (no forms or such)
+2- automate the search of targets (google etc)
+	- there are already many scripts out there. create my own. not very hard?
+	- look for a search engine other than google.
+3- automate the explotation of targets.
+	- from point 2 when should have a list of possible targets.
+	- take that list and try to exploit it.
+	- use a set of test and so on to keep track of whats going on why some are not vuln etc.
+	

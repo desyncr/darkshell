@@ -1,0 +1,95 @@
+
+
+					Darkshell project 
+
+
+--------------------------------------------------------------------------------------------------
+
+(interactive command line on localhost)		(shell/php/raw/mysql interpreters on remote host)
+>user input 
+	(process input)	 >>>>>>>>>>>>>>>>>>>>>>>>>> exec($input), php($input) etc
+			
+				<<<<<<<<<<<<<<<< sends back output
+	print $result
+
+>more input
+
+
+stablishConnection() // credentials, cookies, user/pass etc
+while (1)
+	read input => data
+	if not an internalCommand()
+		send data, credential, cookies
+	endif
+	print readResult()
+
+endwhile
+
+closeConnection() /// kill cookies
+
+
+// server side
+if ( autenticated )
+	resumeState()
+	parseCommand()
+	echo execute($command)
+endif
+
+----------------------------------------------------------------------------------------------------
+
+* how to post files? 
+	internal commands: set (set variables shared with remote), send (sends a file from local to remote)
+				get (downloads a file from remote), login/logout
+				shell (change interpreter by php, perl bash, mysql, etc)
+				exec (executes raw code )
+				<< reads until next <<
+
+* plframework
+	* network::
+		* www::
+			comm -> protocol
+				::send, ::parse/read
+	* db
+		* json -> protocol
+			::load, ::save, ::init, ::reset
+
+* protocol
+	version
+	status_code
+	status_description
+	debug_information
+	payload
+	shell
+	
+* shell state
+ 	current_shell
+	current_path
+	user
+	pass
+	history
+	aliases
+	env
+
+$asphyxia@dev> ./shell.pl
+> Darkshell version 123
+> login asphyxia@http://victim.com/path/to/shell.php
+> ******
+> /path/to/> pwd
+> /path/to/
+> /path/to/> shell php
+> [php] /path/to/> json_encode(array('cock','pussy','loli'));
+> ....
+> [php] /path/to/> <<
+> >> function test($name){
+> >>	return base64_encode($name);
+> >> }
+> >> test('dario');
+> >> <<;
+> ...
+> [php] /path/to/>
+	
+
+---------------------------------------------------------------------------------
+
+			
+				

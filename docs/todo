@@ -1,0 +1,56 @@
+version 0.1 (development)
+26/05/2012
+- Major refactoring going on.
+	- comm has-a protocol and protocol has-a network (both injectable and independent of each other)
+	- handlers are currently broken as the new structure wont handle them.
+	- state.pm not fully implemented.
+	- shell state support faulty (in remote) -- doesn't handle session.
+
+05/04/2012
+- Script to turn a json data into a structure shared by both the local shell (perl) as well as the remote (php) to cominicate (protocol).
+	The idea is to have a basic structure for data exchange. So the actual payload is wrapped around this protocol.
+
+	(packet)
+		version: 1
+		status_code: 	202
+		status_desc: 	everything went better than expected :)
+		debug_info: 	echo off
+		payload:	ls *
+
+	So, from the local shell I can create a new packet like this:
+		$packet = Protocol->new();
+		$packet->{payload} = 'uname -a;id'; # version and such are omitted and managed by the object itself
+
+		$command->send($packet);
+
+
+	This way on the remote side we get a structure like this:
+		echo $protocol['payload']; # => 'uname -a;id'
+
+	The point in this script is to programmatically create these structures from a common point. Both in local (perl) and remote (php) shall share
+	the same structure
+
+	IDEAS: Does it's necesary? Both languages are lossely typed, so there is no real need to force a given structure.
+
+- Make it fully customizable through configuration files: json, yaml, ini or whatever other. I don't think .pm would be a good idea
+	but it would be the easier. Also add support for command line configuration. The configuration should be modificable
+	from the shell itself (with this in mind using json or any non-user friendy data formate is not a bad idea since
+	it isn't expected the used to touch the configuration manually).
+
+- Add encryption support at protocol level (transparent to the comm.pm module and end user).
+	09/04/2012 - This should be part of the authentication process. No idea how to achieve this atm.
+
+x Set up protocol.pm code definitions and status descriptions to use in the code. -- no status description. Debug information instead.
+	09/04/2012 - There is no very a solid relevance for the protocol structure as it's not strictily verified or respected in anyway.
+
+x Start the parse.pm module to handle parsing of command lines.
+	09/04/2012 - The parse module right now doesn't little to nothing. Just checking the first param (to see if it's a `internal` command) and leaving the rest alone.
+
+x Add support for variables and state.
+	09/04/2012 - No variables yet. But the state seems to work at least in `bare` version.
+
+- Determine support for the shell (needs exec enabled and so on, json available and few other things)
+	09/04/2012 - No verification of any kind is performed atm. Macros/shortcuts/common commands/alias should be the solution.
+
+
+
