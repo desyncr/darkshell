@@ -45,13 +45,13 @@ sub closelog {
 }
 sub dump
 {
-	my ($self, $msg, $dump) = @_;
+    my ($self, $msg, $dump) = @_;
     my ($logfile);
     if ($self->{logfile}) {
         $logfile = "[ $self->{logfile} ]";
     }
     $message = '[ ' . scalar localtime(time()) . " ][ $self->{label} ]$logfile $msg\n";
-	if ($self->{verbosity} >= 1)
+    if ($self->{verbosity} >= 1)
     {
         print $message;
         print Dumper $dump;

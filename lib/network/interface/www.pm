@@ -10,21 +10,21 @@ our @ISA = qw(logger base);
 
 sub new
 {
-	my ($class, $settings) = @_;
+    my ($class, $settings) = @_;
 
     my $self  = $class->SUPER::new($settings);
-	my $child = {
-		proxy 	=> $settings->{proxy}	    || 'socks://127.0.0.1:9050',
-		proto 	=> $settings->{proto}       || 'http',
+    my $child = {
+        proxy   => $settings->{proxy}       || 'socks://127.0.0.1:9050',
+        proto   => $settings->{proto}       || 'http',
 
-		timeout	=> $settings->{timeout}	    || 60,
-		tries  	=> $settings->{tries}	    || 10,
-		agent  	=> $settings->{agent}	    || 'Mozilla/5.0 (X11; Linux i686; rv:7.0.1) Gecko/20100101 Firefox/7.0.1',
+        timeout => $settings->{timeout}     || 60,
+        tries   => $settings->{tries}       || 10,
+        agent   => $settings->{agent}       || 'Mozilla/5.0 (X11; Linux i686; rv:7.0.1) Gecko/20100101 Firefox/7.0.1',
         cookies => $settings->{cookies}     || 1,
 
         config  => $settings->{config}      || './config/',
         downloads=>$settings->{downloads}   || './downloads/',
-        ua 		=> LWP::UserAgent->new,
+        ua      => LWP::UserAgent->new,
 
         test    => $settings->{test}        || undef,
 
@@ -32,7 +32,7 @@ sub new
         verbosity   => $settings->{verbosity},
         version     => 2,
         revision    => 1,
-	};
+    };
     foreach (keys %$child) {
         $self->{$_} = $child->{$_};
     }
@@ -79,20 +79,20 @@ sub get
 }
 sub post
 {
-	my ($self, $url, $post) = @_;
-	$self->log("Post to: `$url`");
+    my ($self, $url, $post) = @_;
+    $self->log("Post to: `$url`");
     $self->dump("Post stucture ", $post);
-	my $response = $self->{ua}->post($url, $post );
+    my $response = $self->{ua}->post($url, $post );
 
-	if ($response->is_success)
-	{
+    if ($response->is_success)
+    {
         $self->log("Post was successfull");
         $self->log("Response was: " . $response->decoded_content);
-		return $response->decoded_content;
-	}else{
-		$self->log("Error: " . $! );
-		return 0;
-	}
+        return $response->decoded_content;
+    }else{
+        $self->log("Error: " . $! );
+        return 0;
+    }
 }
 sub upload
 {
