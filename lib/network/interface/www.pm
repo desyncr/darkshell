@@ -14,13 +14,13 @@ sub new
 
     my $self  = $class->SUPER::new($settings);
 	my $child = {
-		proxy 	=> $settings->{proxy}	    || undef,
-		proto 	=> $settings->{proto}       || undef,
+		proxy 	=> $settings->{proxy}	    || 'socks://127.0.0.1:9050',
+		proto 	=> $settings->{proto}       || 'http',
 
 		timeout	=> $settings->{timeout}	    || 60,
 		tries  	=> $settings->{tries}	    || 10,
 		agent  	=> $settings->{agent}	    || 'Mozilla/5.0 (X11; Linux i686; rv:7.0.1) Gecko/20100101 Firefox/7.0.1',
-        cookies => $settings->{cookies}     || undef,
+        cookies => $settings->{cookies}     || 1,
 
         config  => $settings->{config}      || './config/',
         downloads=>$settings->{downloads}   || './downloads/',
@@ -28,10 +28,10 @@ sub new
 
         test    => $settings->{test}        || undef,
 
-        debug => 1,
-        verbosity => 1,
-        version => 2,
-        revision => 1,
+        debug       => $settings->{debug},
+        verbosity   => $settings->{verbosity},
+        version     => 2,
+        revision    => 1,
 	};
     foreach (keys %$child) {
         $self->{$_} = $child->{$_};
@@ -82,7 +82,6 @@ sub post
 	my ($self, $url, $post) = @_;
 	$self->log("Post to: `$url`");
     $self->dump("Post stucture ", $post);
-
 	my $response = $self->{ua}->post($url, $post );
 
 	if ($response->is_success)

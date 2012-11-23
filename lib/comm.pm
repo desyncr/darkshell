@@ -42,7 +42,7 @@ sub sendCommand {
 	$self->log("sendCommand($cmd, ...)");
 	my $packet = {
 		cmd 	=> $cmd,
-		params 	=> $params
+		params 	=> "@$params",
 	};
 
 	return $self->protocol()->sendPacket($packet);

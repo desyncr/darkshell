@@ -15,18 +15,20 @@ my %config = (
 	compress 	=> 0,
 	minify		=> 1,
 	encode 		=> 1,
+    include_path => '.',
 );
 
 GetOptions(
 	'build=i'	=> \$config{build},
 	'deploy=i'	=> \$config{deploy},
-
+    'target=s'  => \$config{target},
 	'output=s'	=> \$config{output},
 	'file=s'	=> \$config{file},
 	'join=i'	=> \$config{join},
 	'compress=i'=> \$config{compress},
 	'minify=i'	=> \$config{minify},
 	'encode=i'	=> \$config{encode},
+    'include_path=s' => \$config{include_path},
 );
 
 my $regex = 'include \"(.*)\"\;';
@@ -41,7 +43,7 @@ if ($config{build}) {
 
 		print "Joinin @files...\n";
 		foreach (reverse @files) {
-			$buffer = `cat $_` . $buffer;
+			$buffer = `cat $config{include_path}/$_` . $buffer;
 		}
 
 		$buffer =~ s/\<\?php//g;
@@ -54,11 +56,10 @@ if ($config{build}) {
 		$buffer =~ s/\t//g;
 	}
 	if ($config{encode}) {
-		$buffer =~ s/\<\?php//g;
 		$buffer = "base64_decode('" . encode_base64($buffer, "") . "')";
 		$buffer = "<?php eval($buffer);";
 	}else{
-		$buffer = "$buffer";
+		$buffer = "<?php $buffer";
 	}
 
 	open FILE, ">$config{output}" || die $!;

