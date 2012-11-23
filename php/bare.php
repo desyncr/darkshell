@@ -252,6 +252,7 @@ class Shell{
 	}
 	function sendResponse(){
 		$this->request['debug_information'] = json_encode($_SESSION);
+        $this->request['connecting_from'] = json_encode($_SERVER['REMOTE_ADDR']);
 		if (isset($_POST['password'])) {
 			echo json_encode($this->request);
 		}

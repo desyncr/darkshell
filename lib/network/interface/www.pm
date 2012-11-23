@@ -14,8 +14,8 @@ sub new
 
     my $self  = $class->SUPER::new($settings);
 	my $child = {
-		proxy 	=> $settings->{proxy}	    || undef,
-		proto 	=> $settings->{proto}       || undef,
+		proxy 	=> $settings->{proxy}	    || 'socks://127.0.0.1:9050',
+		proto 	=> $settings->{proto}       || 'http',
 
 		timeout	=> $settings->{timeout}	    || 60,
 		tries  	=> $settings->{tries}	    || 10,
