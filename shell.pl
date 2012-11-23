@@ -7,14 +7,15 @@ use lib::protocol2::protocol;
 use lib::network::network;
 
 use config::default;
-my $shell = new shell({	debug 		=> 1,
-						verbosity 	=> 1,
-						echo 		=> 1,
+my $DEBUG = 0;
+my $shell = new shell({	debug 		=> $DEBUG,
+						verbosity 	=> $DEBUG,
+						echo 		=> $DEBUG,
 						protocol 	=> new protocol({
 								interface 	=> 'old',
 								network 	=> new network(),
-								debug		=> 1,
-								verbosity   => 1,
+								debug		=> $DEBUG,
+								verbosity   => $DEBUG,
 							}),
 					});
 
