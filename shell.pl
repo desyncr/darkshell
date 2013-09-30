@@ -29,7 +29,7 @@ if (defined $ARGV[0] && $shell->shellLogin($ARGV[0])) {
         if ($response != 0 && defined $response->{response}) {
             print $response->{response};
         } else {
-            print 'Error grabbing response from server!\n';
+            print "Error grabbing response from server!\n";
         }
         $shell->prompt();   
     }
