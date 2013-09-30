@@ -36,7 +36,7 @@ sub processInput {
 
 sub displayPrompt {
     my ($self) = @_;
-    print '>';
+    print '> ';
 }
 
 sub hasHook {
