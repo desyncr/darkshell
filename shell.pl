@@ -26,8 +26,10 @@ if (defined $ARGV[0] && $shell->shellLogin($ARGV[0])) {
     $shell->prompt();
     while (my $cmd = $shell->process()) {
         my $response = $shell->execute($cmd->{command}, $cmd->{params});
-        if (defined $response->{response}) {
+        if ($response != 0 && defined $response->{response}) {
             print $response->{response};
+        } else {
+            print 'Error grabbing response from server!\n';
         }
         $shell->prompt();   
     }
