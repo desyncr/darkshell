@@ -6,7 +6,7 @@ use base qw(base);
 
 sub new {
     my ($class, $settings) = @_;
-    my $protocol = $settings->{interface} || 'raw';
+    my $protocol = $settings->{interface} || 'old';
     require $ENV{'PWD'} . "/lib/protocol2/interface/$protocol.pm";
     my $self = {
         protocol => $protocol->new($settings) || undef,
