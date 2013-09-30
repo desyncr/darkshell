@@ -2,3 +2,6 @@ darkshell.*
 log/
 downloads/
 docs/
+tools/*
+config/*.dat
+files/*
