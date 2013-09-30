@@ -3,6 +3,7 @@ use HTTP::Request::Common;
 use HTTP::Response;
 use HTTP::Cookies;
 use LWP::UserAgent;
+use LWP::Protocol::socks;
 
 use lib::base;
 use lib::logger;
@@ -28,8 +29,8 @@ sub new
 
         test    => $settings->{test}        || undef,
 
-        debug       => $settings->{debug},
-        verbosity   => $settings->{verbosity},
+        debug       => $settings->{debug}       || 0,
+        verbosity   => $settings->{verbosity}   || 0,
         version     => 2,
         revision    => 1,
     };
@@ -81,8 +82,8 @@ sub post
 {
     my ($self, $url, $post) = @_;
     $self->log("Post to: `$url`");
-    $self->dump("Post stucture ", $post);
-    my $response = $self->{ua}->post($url, $post );
+    $self->dump("Post structure ", $post);
+    my $response = $self->{ua}->post($url, $post);
 
     if ($response->is_success)
     {
